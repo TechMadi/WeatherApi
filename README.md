@@ -8,14 +8,14 @@ In this project I consumed the Open Weather Api
 
 ### Lessons Learnt
 
-React Hooks
-Binding in React functions
-Fetching and Consuming data
+- React Hooks
+- Binding in React functions
+- Fetching and Consuming data
 
 ### Challenges faced
 
-Setting Default values
-Clean code
+- Setting Default values
+- Clean code
 
 ### Link
 
