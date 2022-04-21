@@ -87,7 +87,6 @@ const App = () => {
             </>
           ) : typeof weather.main !== "undefined" ? (
             <>
-              {weather.cod === "404" ? "Not found" : "Yey"}
               <div className="location-box">
                 <div className="location">
                   {weather.name},{weather.sys.country}
