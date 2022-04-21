@@ -1,25 +1,111 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
 
-function App() {
+const api = {
+  key: "a36a9b3d67d03a7b3e77ac826f8af978",
+  base: "https://api.openweathermap.org/data/2.5/",
+};
+
+const App = () => {
+  const dateBuilder = (d) => {
+    let months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    let days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+
+    let day = days[d.getDay()];
+    let date = d.getDate();
+    let month = months[d.getMonth()];
+    let year = d.getFullYear();
+    return `${day}  ${date}  ${month} ${year}`;
+  };
+
+  const [query, setQuery] = React.useState("");
+  const [weather, setWeather] = React.useState("");
+
+  const search = (evt) => {
+    if (evt.key === "Enter") {
+      fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
+        .then((res) => res.json())
+        .then((result) => {
+          if (result.cod === "404") {
+          }
+          setWeather(result);
+          setQuery("");
+          console.log(result);
+        });
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div
+      className={
+        typeof weather.main != "undefined"
+          ? weather.main.temp > 16
+            ? "app-warm"
+            : "app"
+          : "app"
+      }
+    >
+      <main>
+        <div className="search-box">
+          <input
+            type="text"
+            placeholder="Search your city..."
+            className="search-bar"
+            onChange={(e) => setQuery(e.target.value)}
+            value={query}
+            onKeyPress={search}
+          />
+        </div>
+
+        <div>
+          {weather.cod === "404" ? (
+            <>
+              <div className="weather-box">
+                <div className="temp">404</div>
+                <div className="weather">City/Town not found</div>
+              </div>
+            </>
+          ) : typeof weather.main !== "undefined" ? (
+            <>
+              {weather.cod === "404" ? "Not found" : "Yey"}
+              <div className="location-box">
+                <div className="location">
+                  {weather.name},{weather.sys.country}
+                </div>
+                <div className="date">{dateBuilder(new Date())}</div>
+              </div>
+              <div className="weather-box">
+                <div className="temp">{Math.round(weather.main.temp)}°c</div>
+                <div className="weather">{weather.weather[0].main}</div>
+              </div>
+            </>
+          ) : (
+            ""
+          )}
+        </div>
+      </main>
     </div>
   );
-}
+};
 
 export default App;
